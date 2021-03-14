@@ -68,9 +68,9 @@
 }
 
 .test-paragraph {
-  font-size: 12px;
+  font-size: 16px;
   background: #e9e7e4;
   padding: 12px;
-  /* display: flex;
-    flex-direction: row; */
+  font-family: "Courier New", Courier, monospace;
+  letter-spacing: 1px;
 }
