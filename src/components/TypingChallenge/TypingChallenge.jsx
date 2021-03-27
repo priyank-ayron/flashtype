@@ -5,8 +5,8 @@ import "./TypingChallenge.css";
 function TypingChallenge({
   timeRemaining,
   timeStarted,
-  selectedParagraph,
   testInfo,
+  onInputChange,
 }) {
   return (
     <div className="typing-challenge">
@@ -23,15 +23,24 @@ function TypingChallenge({
       <div class="textarea-container">
         <div class="textarea-left">
           <div class="textarea test-paragraph">
-            {testInfo.map((testCharacter) => {
+            {testInfo.map((testCharacter, index) => {
               return (
-                <TestLetter individualLetterInfo={testCharacter}></TestLetter>
+                <TestLetter
+                  key={index}
+                  individualLetterInfo={testCharacter}
+                ></TestLetter>
               );
             })}
           </div>
         </div>
         <div class="textarea-right">
-          <textarea class="textarea" placeholder="Start typing here"></textarea>
+          <textarea
+            class="textarea"
+            placeholder="Start typing here"
+            onChange={(e) => {
+              onInputChange(e.target.value);
+            }}
+          ></textarea>
         </div>
       </div>
     </div>

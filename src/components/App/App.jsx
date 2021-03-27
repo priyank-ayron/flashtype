@@ -1,28 +1,53 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import "./App.css";
 import Nav from "../Nav/Nav";
 import Landing from "../Landing/Landing";
 import Footer from "../Footer/Footer";
 import ChallengeSection from "../ChallengeSection/ChallengeSection";
 
-const TotalTime = 60;
-const url = "http://metaphorpsum.com/paragraphs/1/9";
+const url =
+  "https://baconipsum.com/api/?type=all-meat&paras=3&start-with-lorem=1&format=text";
 
-function App() {
-  const [selectedParagraph, setSelectedParagraph] = useState("");
-  const [testInfo, setTestInfo] = useState([]);
-  var state = {
-    timeStarted: false,
-    timeRemaining: TotalTime,
-    words: 0,
-    characters: 0,
-    wpm: 0,
+const TotalTime = 60;
+const DefaultState = {
+  selectedParagraph: "Hello World!",
+  testInfo: [],
+  timerStarted: false,
+  timeRemaining: TotalTime,
+  words: 0,
+  characters: 0,
+  wpm: 0,
+};
+
+class App extends React.Component {
+  state = DefaultState;
+  handleUserInput = (input) => {
+    if (!this.state.timeStarted) {
+      this.startTimer();
+    }
   };
-  useEffect(() => {
+
+  startTimer = () => {
+    console.log("started");
+    this.setState({ setTimeStarted: true });
+    const timer = setInterval(() => {
+      if (this.state.timeRemaining > 0) {
+        this.setState({ timeRemaining: this.state.timeRemaining - 1 });
+      } else {
+        clearInterval(timer);
+      }
+    }, 1000);
+  };
+
+  componentDidMount() {
+    this.fetchNewParagraph();
+  }
+
+  fetchNewParagraph = () => {
     fetch(url)
       .then((response) => response.text())
       .then((data) => {
-        setSelectedParagraph(data);
+        this.setState({ setSelectedParagraph: data });
         const selectedParagraphArray = data.split("");
         const temp = selectedParagraphArray.map((selectedLetter) => {
           return {
@@ -30,27 +55,29 @@ function App() {
             status: "notAttempted",
           };
         });
-        setTestInfo(temp);
+        this.setState({ testInfo: temp });
       });
-  }, []);
+  };
 
-  console.log(testInfo);
-  return (
-    <div className="app">
-      <Nav></Nav>
-      <Landing></Landing>
-      <Footer></Footer>
-      <ChallengeSection
-        selectedParagraph={selectedParagraph}
-        timeStarted={state.timeStarted}
-        timeRemaining={state.timeRemaining}
-        words={state.words}
-        characters={state.characters}
-        wpm={state.wpm}
-        testInfo={testInfo}
-      ></ChallengeSection>
-    </div>
-  );
+  render() {
+    return (
+      <div className="app">
+        <Nav></Nav>
+        <Landing></Landing>
+        <Footer></Footer>
+        <ChallengeSection
+          selectedParagraph={this.state.selectedParagraph}
+          timeStarted={this.state.timeStarted}
+          timeRemaining={this.state.timeRemaining}
+          words={this.state.words}
+          characters={this.state.characters}
+          wpm={this.state.wpm}
+          testInfo={this.state.testInfo}
+          onInputChange={this.handleUserInput}
+        ></ChallengeSection>
+      </div>
+    );
+  }
 }
 
 export default App;

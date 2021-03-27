@@ -10,6 +10,7 @@ function ChallengeSection({
   characters,
   wpm,
   testInfo,
+  onInputChange,
 }) {
   return (
     <div className="challenge-section-container">
@@ -23,6 +24,7 @@ function ChallengeSection({
           characters={characters}
           wpm={wpm}
           testInfo={testInfo}
+          onInputChange={onInputChange}
         ></TestContainer>
       </div>
     </div>

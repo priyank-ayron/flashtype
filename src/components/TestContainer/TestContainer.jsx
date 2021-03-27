@@ -11,6 +11,7 @@ function TestContainer({
   characters,
   wpm,
   testInfo,
+  onInputChange,
 }) {
   return (
     <div className="test-container">
@@ -24,6 +25,7 @@ function TestContainer({
             characters={characters}
             wpm={wpm}
             testInfo={testInfo}
+            onInputChange={onInputChange}
           ></TypingChallengeContainer>
         </div>
       ) : (
