@@ -8,7 +8,7 @@ import ChallengeSection from "../ChallengeSection/ChallengeSection";
 const url =
   "https://baconipsum.com/api/?type=all-meat&paras=3&start-with-lorem=1&format=text";
 
-const TotalTime = 2;
+const TotalTime = 60;
 const DefaultState = {
   selectedParagraph: "",
   testInfo: [],
