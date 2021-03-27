@@ -8,9 +8,9 @@ import ChallengeSection from "../ChallengeSection/ChallengeSection";
 const url =
   "https://baconipsum.com/api/?type=all-meat&paras=3&start-with-lorem=1&format=text";
 
-const TotalTime = 60;
+const TotalTime = 2;
 const DefaultState = {
-  selectedParagraph: "Hello World!",
+  selectedParagraph: "",
   testInfo: [],
   timerStarted: false,
   timeRemaining: TotalTime,
@@ -25,14 +25,64 @@ class App extends React.Component {
     if (!this.state.timeStarted) {
       this.startTimer();
     }
+    const characters = input.length;
+    const words = input.split(" ").length;
+    const index = characters - 1;
+    if (index < 0) {
+      this.setState({
+        testInfo: [
+          {
+            testLetter: this.state.testInfo[0].testLetter,
+            status: "notAttempted",
+          },
+          ...this.state.testInfo.slice(1),
+        ],
+        characters,
+        words,
+      });
+
+      return;
+    }
+    if (index >= this.state.selectedParagraph.length) {
+      this.setState({
+        characters,
+        words,
+      });
+      return;
+    }
+    const testInfo = this.state.testInfo;
+    if (!(index === this.state.selectedParagraph.length - 1))
+      testInfo[index + 1].status = "notAttempted";
+
+    // Check for mistake
+    const isMistake = input[index] === testInfo[index].testLetter;
+
+    // Update the testInfo
+    testInfo[index].status = isMistake ? "correct" : "incorrect";
+
+    // Update the state
+    this.setState({
+      testInfo,
+      words,
+      characters,
+    });
+  };
+
+  startAgain = () => {
+    this.fetchNewParagraph();
   };
 
   startTimer = () => {
-    console.log("started");
     this.setState({ setTimeStarted: true });
     const timer = setInterval(() => {
       if (this.state.timeRemaining > 0) {
-        this.setState({ timeRemaining: this.state.timeRemaining - 1 });
+        const timeSpent = TotalTime - this.state.timeRemaining;
+        const wpm =
+          timeSpent > 0 ? (this.state.words / timeSpent) * TotalTime : 0;
+        this.setState({
+          timeRemaining: this.state.timeRemaining - 1,
+          wpm: parseInt(wpm),
+        });
       } else {
         clearInterval(timer);
       }
@@ -55,7 +105,11 @@ class App extends React.Component {
             status: "notAttempted",
           };
         });
-        this.setState({ testInfo: temp });
+        this.setState({
+          ...DefaultState,
+          testInfo: temp,
+          selectedParagraph: data,
+        });
       });
   };
 
@@ -74,6 +128,7 @@ class App extends React.Component {
           wpm={this.state.wpm}
           testInfo={this.state.testInfo}
           onInputChange={this.handleUserInput}
+          startAgain={this.startAgain}
         ></ChallengeSection>
       </div>
     );

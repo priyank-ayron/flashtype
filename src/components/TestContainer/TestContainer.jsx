@@ -12,6 +12,7 @@ function TestContainer({
   wpm,
   testInfo,
   onInputChange,
+  startAgain,
 }) {
   return (
     <div className="test-container">
@@ -30,7 +31,12 @@ function TestContainer({
         </div>
       ) : (
         <div className="try-again-container">
-          <TryAgain words={words} characters={characters} wpm={wpm}></TryAgain>
+          <TryAgain
+            words={words}
+            characters={characters}
+            wpm={wpm}
+            startAgain={startAgain}
+          ></TryAgain>
         </div>
       )}
     </div>

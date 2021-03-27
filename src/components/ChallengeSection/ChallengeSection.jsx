@@ -11,6 +11,7 @@ function ChallengeSection({
   wpm,
   testInfo,
   onInputChange,
+  startAgain,
 }) {
   return (
     <div className="challenge-section-container">
@@ -25,6 +26,7 @@ function ChallengeSection({
           wpm={wpm}
           testInfo={testInfo}
           onInputChange={onInputChange}
+          startAgain={startAgain}
         ></TestContainer>
       </div>
     </div>
